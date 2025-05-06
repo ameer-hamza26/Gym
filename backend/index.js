@@ -10,11 +10,29 @@ const router = express.Router()
 
 config({path: "./config.env"})
 
+// CORS configuration
+const allowedOrigins = [
+    'http://localhost:5173',  // Local development
+    'http://localhost:5174',  // Alternative local port
+    'https://gym-nine-silk.vercel.app',  // Production frontend
+    'https://gym-nine-silk.vercel.app/'  // Production frontend with trailing slash
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true
-}))
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 
