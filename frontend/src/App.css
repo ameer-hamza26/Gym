@@ -209,6 +209,11 @@ header p {
   .workout_session .wrapper .bootcamps div p {
     font-size: 20px;
   }
+  .wrapper img{
+    height: 75vh;
+    width: 100vw;
+    object-fit: cover;
+  }
 }
 
 .gallery {
